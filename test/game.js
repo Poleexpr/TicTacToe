@@ -9,6 +9,21 @@ const initialGameBoard = [
 	['', '', '']
 ]
 
+const fillCells = game => {
+	for (let i = 0; i < 3; i++) {
+		for (let j = 0; j < 3; j++) {
+			if (i !== 2 || j !== 2) game.acceptUserMove(i, j)
+		}
+	}
+}
+
+const count = (arr, symbol) =>
+	arr.reduce((result, row) => {
+		return row.reduce((count, el) => {
+			return el === symbol ? ++count : count
+		}, result)
+	}, 0)
+
 let game
 beforeEach(() => { game = new Game() })
 
@@ -78,6 +93,17 @@ describe('Game', () => {
 
 		expect(board[1][1]).toEqual(computerMoveSymbol)
 		mock.mockRestore()
+	})
+
+	test('Computer moves in cell that is not taken', () => {
+		fillCells(game)
+
+		game.createComputerMove()
+		const board = game.getState()
+
+		expect(count(board, userMoveSymbol)).toBe(8)
+		expect(count(board, computerMoveSymbol)).toBe(1)
+		expect(board[2][2]).toEqual(computerMoveSymbol)
 	})
 })
 
