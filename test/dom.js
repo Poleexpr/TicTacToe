@@ -4,10 +4,29 @@ const Game = require('../src/Game')
 
 const { JSDOM } = jsdom
 const dom = new JSDOM('<html><body id="root"></body></html>')
-const createInstance = () => new DomController('#root')
+const createInstance = (game = {}) => {
+	return new DomController({
+		game: game,
+		root: '#root'
+	})
+}
+const createGame = (board) => new Game(board)
 
 global.window = dom.window
 global.document = dom.window.document
+
+beforeEach(() => {
+	window.alert = jest.fn()
+})
+
+afterEach(() => {
+	document.body.innerHTML = ''
+	window.alert.mockReset()
+})
+
+afterAll(() => {
+	window.alert.mockRestore()
+})
 
 describe('DOM controller', () => {
 	test('Creates empty table', () => {
@@ -16,10 +35,6 @@ describe('DOM controller', () => {
 		domController.createTable()
 
 		expect(document.querySelectorAll('table').length).toBe(1)
-
-		afterEach(() => {
-			document.body.innerHTML = ''
-		})
 	})
 
 	test('Creates table with 3 rows and 3 columns', () => {
@@ -39,5 +54,26 @@ describe('DOM controller', () => {
 		document.querySelector('table td').click()
 
 		expect(domController.lastClickedIndices).toEqual([0, 0])
+	})
+
+	test('Makes user move in game on cell click', () => {
+		const gameMock = { acceptUserMove: jest.fn() }
+		const domController = createInstance(gameMock)
+
+		domController.createTable(3, 3)
+		document.querySelector('table td').click()
+
+		expect(domController.game.acceptUserMove).toHaveBeenCalled()
+	})
+
+	test('Gets an alert when user makes move in taken cell', () => {
+		const game = createGame()
+		const domController = createInstance(game)
+
+		domController.init()
+		document.querySelector('table td').click()
+		document.querySelector('table td').click()
+
+		expect(window.alert).toHaveBeenCalled()
 	})
 })
