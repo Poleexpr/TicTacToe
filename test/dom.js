@@ -31,4 +31,13 @@ describe('DOM controller', () => {
 		expect(document.querySelectorAll('tr').length).toBe(3)
 		expect(document.querySelectorAll('td').length).toBe(9)
 	})
+
+	test('Remembers indices of last clicked cell', () => {
+		const domController = createInstance()
+
+		domController.createTable(3, 3)
+		document.querySelector('table td').click()
+
+		expect(domController.lastClickedIndices).toEqual([0, 0])
+	})
 })
