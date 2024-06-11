@@ -40,6 +40,17 @@ class Game {
 		return this._history
 	}
 
+	isWinner(player) {
+		const symbol = this._getSymbolForPlayer(player)
+		const range = [...Array(this._fieldSize).keys()]
+		const isEqual = this._checkCellEqual(symbol)
+
+		const horizontal = range.reduce((res, i) =>
+			isEqual(i, 0) && isEqual(i, 1) && isEqual(i, 2) || res, false)
+
+		return horizontal
+	}
+
 	_getRandomCoordinate() {
 		return Math.floor(Math.random() * (this._fieldSize - 0))
 	}
@@ -78,6 +89,19 @@ class Game {
 			row.reduce((count, el) =>
 				el === '' ? ++count : count, total), 0)
 	}
+
+	_getSymbolForPlayer(player) {
+		return player === this._userName
+			? this._userMoveSymbol
+			: this._computerMoveSymbol
+	}
+
+	_checkCellEqual(symbol) {
+		return (i, j) =>
+			this._board[i][j] === symbol
+	}
+
+
 }
 
 module.exports = Game
