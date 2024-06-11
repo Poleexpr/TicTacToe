@@ -2,18 +2,19 @@ import { describe, test, expect, beforeEach, afterEach, jest } from '@jest/globa
 import jsdom from 'jsdom'
 const Game = require('../src/Game')
 
-const {JSDOM} = jsdom
+const { JSDOM } = jsdom
 const dom = new JSDOM('<html><body id="root"></body></html>')
+const createInstance = () => new DomController('#root')
 
 global.window = dom.window
 global.document = dom.window.document
 
 describe('DOM controller', () => {
 	test('Creates empty table', () => {
-			const domController = new DomController('#root')
+		const domController = createInstance()
 
-			domController.createTable()
+		domController.createTable()
 
-			expect(document.querySelectorAll('table').length).toBe(1)
+		expect(document.querySelectorAll('table').length).toBe(1)
 	})
 })
