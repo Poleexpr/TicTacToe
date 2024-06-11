@@ -99,4 +99,20 @@ describe('DOM controller', () => {
 		expect(text.indexOf('o') > -1).toBe(true)
 	})
 
+	test('Creates status text below table if someone wins', () => {
+		const game = createGame([
+			['×', '×', ''],
+			['', '', ''],
+			['', '', '']
+		])
+
+		const domController = createInstance(game)
+
+		domController.init()
+		document.querySelector('table tr:nth-child(1) td:nth-child(3)').click()
+
+		const status = document.querySelector('#status')
+		expect(status.textContent).toEqual('user won!')
+	})
+
 })
