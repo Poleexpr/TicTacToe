@@ -25,6 +25,7 @@ class DomController {
 		this.lastClickedIndices = [row, col]
 		try {
 			this._makeUserMove(row, col)
+			this._makeComputerMove()
 		}
 		catch (e) {
 			window.alert(e.message)
@@ -47,6 +48,11 @@ class DomController {
 					.innerHTML = col
 			})
 		})
+	}
+
+	_makeComputerMove() {
+		this.game.createComputerMove()
+		this._redraw()
 	}
 }
 

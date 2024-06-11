@@ -87,4 +87,16 @@ describe('DOM controller', () => {
 
 		expect(text).toEqual('×')
 	})
+
+	test('Makes computer move right after users move', () => {
+		const game = createGame()
+		const domController = createInstance(game)
+
+		domController.init()
+		document.querySelector('table td').click()
+		const text = document.querySelector('table').textContent
+
+		expect(text.indexOf('o') > -1).toBe(true)
+	})
+
 })
